@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.lar.ExportImportThreadLocal;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.notifications.UserNotificationDefinition;
 import com.liferay.portal.kernel.sanitizer.SanitizerUtil;
 import com.liferay.portal.kernel.search.BaseModelSearchResult;
 import com.liferay.portal.kernel.search.Field;
@@ -907,8 +908,7 @@ public class JournalArticleLocalServiceImpl
 	 */
 	@Indexable(type = IndexableType.DELETE)
 	@Override
-	@SystemEvent(
-		action = SystemEventConstants.ACTION_SKIP, send = false)
+	@SystemEvent(action = SystemEventConstants.ACTION_SKIP, send = false)
 	public JournalArticle deleteArticle(
 			JournalArticle article, String articleURL,
 			ServiceContext serviceContext)
@@ -2669,7 +2669,7 @@ public class JournalArticleLocalServiceImpl
 			Date displayDate = article.getDisplayDate();
 			Date expirationDate = article.getExpirationDate();
 
-			if (((displayDate != null) && displayDate.before(now)) &&
+			if ((displayDate != null) && displayDate.before(now) &&
 				((expirationDate == null) || expirationDate.after(now)) ) {
 
 				return article;
@@ -5359,7 +5359,14 @@ public class JournalArticleLocalServiceImpl
 						article.getGroupId(), article.getArticleId(),
 						article.getDisplayDate(), article.getExpirationDate());
 
-					Date displayDate = dateInterval[0];
+					Date publishDate = dateInterval[0];
+
+					if ((oldStatus != WorkflowConstants.STATUS_APPROVED) &&
+						publishDate.before(now)) {
+
+						publishDate = now;
+					}
+
 					Date expirationDate = dateInterval[1];
 
 					if (neverExpire) {
@@ -5368,7 +5375,7 @@ public class JournalArticleLocalServiceImpl
 
 					assetEntryLocalService.updateEntry(
 						JournalArticle.class.getName(),
-						article.getResourcePrimKey(), displayDate,
+						article.getResourcePrimKey(), publishDate,
 						expirationDate, true);
 				}
 
@@ -5655,7 +5662,7 @@ public class JournalArticleLocalServiceImpl
 
 			serviceContext.setScopeGroupId(article.getGroupId());
 
-			updateStatus(
+			journalArticleLocalService.updateStatus(
 				article.getUserId(), article, WorkflowConstants.STATUS_APPROVED,
 				null, new HashMap<String, Serializable>(), serviceContext);
 		}
@@ -6357,7 +6364,9 @@ public class JournalArticleLocalServiceImpl
 			JournalArticle article, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
-		if (!article.isApproved()) {
+		String layoutFullURL = serviceContext.getLayoutFullURL();
+
+		if (!article.isApproved() || Validator.isNull(layoutFullURL)) {
 			return;
 		}
 
@@ -6413,6 +6422,7 @@ public class JournalArticleLocalServiceImpl
 		SubscriptionSender subscriptionSender = new SubscriptionSender();
 
 		subscriptionSender.setBody(body);
+		subscriptionSender.setClassPK(article.getId());
 		subscriptionSender.setCompanyId(article.getCompanyId());
 		subscriptionSender.setContextAttributes(
 			"[$ARTICLE_ID$]", article.getArticleId(), "[$ARTICLE_TITLE$]",
@@ -6422,6 +6432,17 @@ public class JournalArticleLocalServiceImpl
 		subscriptionSender.setFrom(fromAddress, fromName);
 		subscriptionSender.setHtmlFormat(true);
 		subscriptionSender.setMailId("journal_article", article.getId());
+
+		int notificationType =
+			UserNotificationDefinition.NOTIFICATION_TYPE_ADD_ENTRY;
+
+		if (serviceContext.isCommandUpdate()) {
+			notificationType =
+				UserNotificationDefinition.NOTIFICATION_TYPE_UPDATE_ENTRY;
+		}
+
+		subscriptionSender.setNotificationType(notificationType);
+
 		subscriptionSender.setPortletId(PortletKeys.JOURNAL);
 		subscriptionSender.setReplyToAddress(fromAddress);
 		subscriptionSender.setScopeGroupId(article.getGroupId());

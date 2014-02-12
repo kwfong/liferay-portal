@@ -40,6 +40,12 @@ public class SeleniumBuilder {
 		new SeleniumBuilder(args);
 	}
 
+	/**
+	 * Constructs a Selenium Builder based on the arguments.
+	 *
+	 * @param  args the command-line arguments
+	 * @throws Exception if an exception occurred
+	 */
 	public SeleniumBuilder(String[] args) throws Exception {
 		Map<String, String> arguments = ArgumentsUtil.parseArguments(args);
 
@@ -123,6 +129,12 @@ public class SeleniumBuilder {
 			"\nThere are " + _getTestCaseMethodCount() + " test cases.");
 	}
 
+	/**
+	 * Returns the total number of test case methods by adding the number of
+	 * methods inside each test case file.
+	 *
+	 * @return the total number of test case methods
+	 */
 	private int _getTestCaseMethodCount() {
 		int testCaseCount = 0;
 
@@ -160,6 +172,31 @@ public class SeleniumBuilder {
 		return testCaseCount;
 	}
 
+	/**
+	 * Writes lists of all test case method names, aggregated by component, to a
+	 * properties file named <code>test.case.method.names.properties</code>.
+	 *
+	 * <p>
+	 * Each property follows the format: <code>componentName +
+	 * "_TEST_CASE_METHOD_NAMES=" + testCaseName + "TestCase#test" +
+	 * commandName</code>
+	 * </p>
+	 *
+	 * <p>
+	 * Example <code>test.case.method.names.properties</code> output file:
+	 * </p>
+	 *
+	 * <p>
+	 * <pre>
+	 * <code>
+	 * MARKETPLACE_TEST_CASE_METHOD_NAMES=PortalSmokeTestCase#testSmoke
+	 * PORTAL_APIS_TEST_CASE_METHOD_NAMES=ApisTestCase#testAdd ApisTestCase#test
+	 * </code>
+	 * </pre>
+	 * </p>
+	 *
+	 * @throws Exception if an exception occurred
+	 */
 	private void _writeTestCaseMethodNamesFile() throws Exception {
 		Map<String, Set<String>> testCaseMethodNameMap =
 			new TreeMap<String, Set<String>>();
@@ -243,12 +280,50 @@ public class SeleniumBuilder {
 				Set<String> compontentTestCaseMethodNames =
 					testCaseMethodNameMap.get(componentNameKey);
 
-				String compontentTestCaseMethodNamesString = StringUtil.merge(
+				String testCaseMethodNamesString = StringUtil.merge(
 					compontentTestCaseMethodNames.toArray(
 						new String[compontentTestCaseMethodNames.size()]),
 					StringPool.SPACE);
 
-				sb.append(compontentTestCaseMethodNamesString);
+				sb.append(testCaseMethodNamesString);
+				sb.append("\n");
+			}
+			else {
+				sb.append("PortalSmokeTestCase#testSmoke\n");
+			}
+		}
+
+		sb.append("\n");
+
+		String[] productNames = {"marketplace", "portal", "social-office"};
+
+		for (String productName : productNames) {
+			Set<String> productTestCaseMethodNames = new TreeSet<String>();
+
+			String productKey = productName;
+
+			productName = StringUtil.replace(productName, "-", "_");
+			productName = StringUtil.upperCase(productName);
+
+			sb.append(productName);
+			sb.append("_TEST_CASE_METHOD_NAMES=");
+
+			for (String componentName : componentNames) {
+				if (componentName.startsWith(productKey) &&
+					testCaseMethodNameMap.containsKey(componentName)) {
+
+					productTestCaseMethodNames.addAll(
+						testCaseMethodNameMap.get(componentName));
+				}
+			}
+
+			if (productTestCaseMethodNames.size() != 0) {
+				String testCaseMethodNamesString = StringUtil.merge(
+					productTestCaseMethodNames.toArray(
+						new String[productTestCaseMethodNames.size()]),
+						StringPool.SPACE);
+
+				sb.append(testCaseMethodNamesString);
 				sb.append("\n");
 			}
 			else {
@@ -268,6 +343,40 @@ public class SeleniumBuilder {
 			"../../../test.case.method.names.properties", sb.toString(), false);
 	}
 
+	/**
+	 * Writes lists of all test case method properties, aggregated by test case
+	 * definition scope and test case command scope, to a properties file named
+	 * <code>test.generated.properties</code>.
+	 *
+	 * <p>
+	 * The test case method properties scoped to test case definitions follow
+	 * the format: <code>testCaseName + "TestCase.all." + propertyName =
+	 * propertyValue</code>
+	 * </p>
+	 *
+	 * <p>
+	 * The test case method properties scoped to test case commands follow the
+	 * format: <code>testCaseName + "TestCase.test" + commandName + "." +
+	 * propertyName = propertyValue</code>
+	 * </p>
+	 *
+	 * <p>
+	 * Example <code>test.generated.properties</code> output file:
+	 * </p>
+	 *
+	 * <p>
+	 * <pre>
+	 * <code>
+	 * SOProfileTestCase.all.hook.plugins.includes=deploy-listener-hook,...
+	 * SOProfileTestCase.all.portlet.plugins.includes=calendar-portlet,chat-...
+	 * SOProfileTestCase.all.theme.plugins.includes=so-theme
+	 * SOProfileTestCase.all.web.plugins.includes=resources-importer-web
+	 * </code>
+	 * </pre>
+	 * </p>
+	 *
+	 * @throws Exception if an exception occurred
+	 */
 	private void _writeTestCasePropertiesFile() throws Exception {
 		Set<String> testCaseProperties = new TreeSet<String>();
 

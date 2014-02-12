@@ -246,7 +246,6 @@
 
 					&.active, &.open {
 						> .dropdown-toggle {
-							background-color: transparent;
 							color: #FFF;
 
 							@include respond-to(phone, tablet) {
@@ -783,7 +782,7 @@
 					@include user-select(none);
 
 					.accordion-toggle {
-						background: #F2F2F2 url(../images/arrows/13_left.png) no-repeat 100% -20px;
+						background: #F2F2F2 url(../images/arrows/13_right.png) no-repeat 100% -20px;
 					}
 				}
 

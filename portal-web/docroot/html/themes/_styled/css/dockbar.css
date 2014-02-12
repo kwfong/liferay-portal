@@ -11,10 +11,15 @@ $editLayoutPanelWidth: 460px;
 		#navigation {
 			display: none;
 			left: 0;
-			position: fixed;
-			top: 60px;
-			width: 100%;
+			position: absolute;
+			right: 0;
+			top: -5px;
 			z-index: 301;
+
+			@include respond-to(phone) {
+				left: -20px;
+				right: -20px;
+			}
 
 			&.open {
 				display: block;
@@ -129,14 +134,6 @@ $editLayoutPanelWidth: 460px;
 			top: 9px;
 		}
 
-		.info-items {
-			left: 0;
-			position: absolute;
-			top: 100%;
-			width: 100%;
-			z-index: 1;
-		}
-
 		.navbar-inner {
 			padding: 0 20px;
 
@@ -235,24 +232,18 @@ $editLayoutPanelWidth: 460px;
 									}
 								}
 
-								&.user-avatar {
-									.user-avatar-link {
-										padding: 15px 13px 12px;
+								&.user-avatar .user-avatar-link .nav-item-label {
+									display: inline;
 
-										.nav-item-label {
-											display: inline;
+									.user-avatar-image {
+										background-size: auto 26px;
+										height: 26px;
+										margin-top: 0;
+										width: 26px;
+									}
 
-											.user-avatar-image {
-												background-size: auto 26px;
-												height: 26px;
-												margin-top: 0;
-												width: 26px;
-											}
-
-											.user-full-name {
-												display: none;
-											}
-										}
+									.user-full-name {
+										display: none;
 									}
 								}
 
@@ -309,7 +300,7 @@ $editLayoutPanelWidth: 460px;
 								background: transparent;
 								border-width: 0;
 								display: inline-block;
-								letter-spacing: 1px;
+								margin: 0;
 								padding: 0 5px;
 								position: static;
 								z-index: 350;
@@ -350,10 +341,8 @@ $editLayoutPanelWidth: 460px;
 									}
 
 									> a {
-										font-size: 14px;
-										line-height: 31px;
 										margin: 0;
-										padding: 6px 15px;
+										padding: 10px 15px;
 										white-space: nowrap;
 
 										@include respond-to(phone, tablet) {
@@ -364,6 +353,12 @@ $editLayoutPanelWidth: 460px;
 												background: #555;
 												color: #FFF;
 											}
+										}
+
+										&:focus, &:hover {
+											background-color: transparent;
+											background-image: none;
+											color: #0077B3;
 										}
 
 										> .nav-item-icon {
@@ -679,12 +674,12 @@ $editLayoutPanelWidth: 460px;
 		}
 
 		.info-link-container {
+			position: relative;
 			width: 0;
 		}
 
 		.info-items {
 			height: 1px;
-			width: 715px;
 
 			a, .btn-link {
 				color: #FFF;
@@ -1081,15 +1076,43 @@ $editLayoutPanelWidth: 460px;
 		}
 	}
 
-	@media (max-width: 1140px) {
-		.dockbar-split .dockbar .info-items {
-			width: 515px;
+	.page-customization-bar-container {
+		top: -1px;
+		position: absolute;
+		right: 100%;
+		width: 320px;
+	}
+
+	@media (min-width: 1400px) {
+		.page-customization-bar-container {
+			width: 815px;
+		}
+
+		.staging-ready .page-customization-bar-container {
+			width: 680px;
+		}
+	}
+
+	@media (min-width: 1152px) and (max-width: 1399px) {
+		.page-customization-bar-container {
+			width: 715px;
+		}
+
+		.staging-ready .page-customization-bar-container {
+			width: 475px;
+		}
+	}
+
+	.page-customization-bar-container {
+		@include respond-to(phone, tablet) {
+			position: static;
+			width: 100%;
 		}
 	}
 
 	/* LPS-42547 */
 
-	.dockbar-split .dockbar .nav-collapse {
+	.dockbar .nav-collapse {
 		-webkit-transform: none;
 	}
 }

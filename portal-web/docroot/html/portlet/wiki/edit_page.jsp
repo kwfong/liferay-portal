@@ -19,15 +19,6 @@
 <%
 String redirect = ParamUtil.getString(request, "redirect");
 
-String originalRedirect = ParamUtil.getString(request, "originalRedirect", StringPool.BLANK);
-
-if (originalRedirect.equals(StringPool.BLANK)) {
-	originalRedirect = redirect;
-}
-else {
-	redirect = originalRedirect;
-}
-
 boolean followRedirect = false;
 
 WikiNode node = (WikiNode)request.getAttribute(WebKeys.WIKI_NODE);
@@ -177,7 +168,6 @@ if (Validator.isNull(redirect)) {
 <aui:form action="<%= editPageActionURL %>" method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "savePage();" %>'>
 	<aui:input name="<%= Constants.CMD %>" type="hidden" />
 	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
-	<aui:input name="originalRedirect" type="hidden" value="<%= originalRedirect %>" />
 	<aui:input name="nodeId" type="hidden" value="<%= nodeId %>" />
 	<aui:input name="newPage" type="hidden" value="<%= newPage %>" />
 
@@ -464,7 +454,7 @@ if (Validator.isNull(redirect)) {
 					Format dateFormatDate = FastDateFormatFactoryUtil.getDateTime(locale, timeZone);
 					%>
 
-					<%= LanguageUtil.format(pageContext, "this-page-cannot-be-edited-because-user-x-is-modifying-it-and-the-results-have-not-been-published-yet", new Object[] {wikiPage.getUserName(), dateFormatDate.format(wikiPage.getModifiedDate())}) %>
+					<%= LanguageUtil.format(pageContext, "this-page-cannot-be-edited-because-user-x-is-modifying-it-and-the-results-have-not-been-published-yet", new Object[] {HtmlUtil.escape(wikiPage.getUserName()), dateFormatDate.format(wikiPage.getModifiedDate())}, false) %>
 				</div>
 			</c:if>
 		</c:otherwise>
@@ -495,7 +485,7 @@ if (Validator.isNull(redirect)) {
 	}
 
 	function <portlet:namespace />discardDraftPage() {
-		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = "<%= Constants.DELETE %>";
+		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.DELETE %>';
 
 		submitForm(document.<portlet:namespace />fm);
 	}
@@ -511,15 +501,15 @@ if (Validator.isNull(redirect)) {
 			<portlet:param name="tag" value="<%= StringPool.BLANK %>" />
 		</portlet:renderURL>
 
-		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = "<%= Constants.MOVE_TO_TRASH %>";
-		document.<portlet:namespace />fm.<portlet:namespace />redirect.value = "<%= nodeURL.toString() %>";
+		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.MOVE_TO_TRASH %>';
+		document.<portlet:namespace />fm.<portlet:namespace />redirect.value = '<%= nodeURL.toString() %>';
 
 		submitForm(document.<portlet:namespace />fm);
 	}
 
 	function <portlet:namespace />previewPage() {
-		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = "";
-		document.<portlet:namespace />fm.<portlet:namespace />preview.value = "true";
+		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '';
+		document.<portlet:namespace />fm.<portlet:namespace />preview.value = 'true';
 
 		if (window.<portlet:namespace />editor) {
 			document.<portlet:namespace />fm.<portlet:namespace />content.value = window.<portlet:namespace />editor.getHTML();
@@ -529,13 +519,13 @@ if (Validator.isNull(redirect)) {
 	}
 
 	function <portlet:namespace />publishPage() {
-		document.<portlet:namespace />fm.<portlet:namespace />workflowAction.value = "<%= WorkflowConstants.ACTION_PUBLISH %>";
+		document.<portlet:namespace />fm.<portlet:namespace />workflowAction.value = '<%= WorkflowConstants.ACTION_PUBLISH %>';
 
 		<portlet:namespace />savePage();
 	}
 
 	function <portlet:namespace />savePage() {
-		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = "<%= newPage ? Constants.ADD : Constants.UPDATE %>";
+		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= newPage ? Constants.ADD : Constants.UPDATE %>';
 
 		if (window.<portlet:namespace />editor) {
 			document.<portlet:namespace />fm.<portlet:namespace />content.value = window.<portlet:namespace />editor.getHTML();

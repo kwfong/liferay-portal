@@ -2554,7 +2554,7 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 			CacheRegistryUtil.clear(ShoppingOrderImpl.class.getName());
 		}
 
-		EntityCacheUtil.clearCache(ShoppingOrderImpl.class.getName());
+		EntityCacheUtil.clearCache(ShoppingOrderImpl.class);
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
@@ -2848,7 +2848,7 @@ public class ShoppingOrderPersistenceImpl extends BasePersistenceImpl<ShoppingOr
 
 		EntityCacheUtil.putResult(ShoppingOrderModelImpl.ENTITY_CACHE_ENABLED,
 			ShoppingOrderImpl.class, shoppingOrder.getPrimaryKey(),
-			shoppingOrder);
+			shoppingOrder, false);
 
 		clearUniqueFindersCache(shoppingOrder);
 		cacheUniqueFindersCache(shoppingOrder);

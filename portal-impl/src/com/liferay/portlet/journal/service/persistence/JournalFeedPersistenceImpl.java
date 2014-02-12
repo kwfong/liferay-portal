@@ -2625,7 +2625,7 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 			CacheRegistryUtil.clear(JournalFeedImpl.class.getName());
 		}
 
-		EntityCacheUtil.clearCache(JournalFeedImpl.class.getName());
+		EntityCacheUtil.clearCache(JournalFeedImpl.class);
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
@@ -2959,7 +2959,8 @@ public class JournalFeedPersistenceImpl extends BasePersistenceImpl<JournalFeed>
 		}
 
 		EntityCacheUtil.putResult(JournalFeedModelImpl.ENTITY_CACHE_ENABLED,
-			JournalFeedImpl.class, journalFeed.getPrimaryKey(), journalFeed);
+			JournalFeedImpl.class, journalFeed.getPrimaryKey(), journalFeed,
+			false);
 
 		clearUniqueFindersCache(journalFeed);
 		cacheUniqueFindersCache(journalFeed);

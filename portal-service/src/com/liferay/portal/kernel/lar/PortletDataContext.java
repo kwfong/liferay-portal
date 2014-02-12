@@ -92,6 +92,12 @@ public interface PortletDataContext extends Serializable {
 	@Deprecated
 	public static final String ROOT_PATH_PORTLETS = "/portlets/";
 
+	/**
+	 * @deprecated As of 7.0.0, replaced by {@link
+	 *             BaseStagedModelDataHandler#exportAssetCategories(
+	 *             PortletDataContext, StagedModel)}
+	 */
+	@Deprecated
 	public void addAssetCategories(Class<?> clazz, long classPK)
 		throws SystemException;
 
@@ -177,6 +183,10 @@ public interface PortletDataContext extends Serializable {
 	public void addRatingsEntries(
 		String className, long classPK, List<RatingsEntry> ratingsEntries);
 
+	/**
+	 * @deprecated As of 7.0.0, with no direct replacement
+	 */
+	@Deprecated
 	public Element addReferenceElement(
 		ClassedModel referrerClassedModel, Element element,
 		ClassedModel classedModel, Class<?> clazz, String referenceType,
@@ -250,6 +260,10 @@ public interface PortletDataContext extends Serializable {
 	@Deprecated
 	public Map<String, long[]> getAssetCategoryIdsMap();
 
+	/**
+	 * @deprecated As of 7.0.0, with no direct replacement
+	 */
+	@Deprecated
 	public Map<String, String[]> getAssetCategoryUuidsMap();
 
 	public Map<String, List<AssetLink>> getAssetLinksMap();
@@ -285,8 +299,16 @@ public interface PortletDataContext extends Serializable {
 
 	public Element getExportDataElement(ClassedModel classedModel);
 
+	/**
+	 * @deprecated As of 7.0.0, replaced by {@link
+	 *             #getExportDataElement(ClassedModel, String)}
+	 */
+	@Deprecated
 	public Element getExportDataElement(
 		ClassedModel classedModel, Class<?> modelClass);
+
+	public Element getExportDataElement(
+		ClassedModel classedModel, String modelClassSimpleName);
 
 	public Element getExportDataGroupElement(
 		Class<? extends StagedModel> clazz);
@@ -424,8 +446,8 @@ public interface PortletDataContext extends Serializable {
 
 	/**
 	 * @deprecated As of 6.2.0, replaced by {@link
-	 *             ExportImportPathUtil#getSourcePortletPath(
-	 *             PortletDataContext, String)}
+	 *             ExportImportPathUtil#getSourcePortletPath(PortletDataContext,
+	 *             String)}
 	 */
 	@Deprecated
 	public String getSourcePortletPath(String portletId);

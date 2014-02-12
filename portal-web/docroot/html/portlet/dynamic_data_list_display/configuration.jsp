@@ -37,6 +37,7 @@ request.setAttribute("record_set_action.jsp-selRecordSet", selRecordSet);
 %>
 
 <liferay-portlet:actionURL portletConfiguration="true" var="configurationActionURL" />
+
 <liferay-portlet:renderURL portletConfiguration="true" varImpl="configurationRenderURL" />
 
 <aui:form action="<%= configurationActionURL %>" method="post" name="fm1">
@@ -106,20 +107,7 @@ request.setAttribute("record_set_action.jsp-selRecordSet", selRecordSet);
 
 			</aui:select>
 
-			<%
-			String editableHelpMessage = null;
-
-			Group scopeGroup = themeDisplay.getScopeGroup();
-
-			if (scopeGroup.isInStagingPortlet(portletDisplay.getId())) {
-				editableHelpMessage = "check-to-allow-users-to-add-records-to-the-list-once-this-application-is-published-to-live";
-			}
-			else {
-				editableHelpMessage = "check-to-allow-users-to-add-records-to-the-list";
-			}
-			%>
-
-			<aui:input helpMessage="<%= editableHelpMessage %>" name="editable" onChange='<%= "document." + renderResponse.getNamespace() + "fm." + renderResponse.getNamespace() + "editable.value = this.checked;" %>' type="checkbox" value="<%= editable %>" />
+			<aui:input helpMessage="check-to-allow-users-to-add-records-to-the-list" name="editable" onChange='<%= "document." + renderResponse.getNamespace() + "fm." + renderResponse.getNamespace() + "editable.value = this.checked;" %>' type="checkbox" value="<%= editable %>" />
 
 			<aui:input helpMessage="check-to-view-the-list-records-in-a-spreadsheet" label="spreadsheet-view" name="spreadsheet" onChange='<%= "document." + renderResponse.getNamespace() + "fm." + renderResponse.getNamespace() + "spreadsheet.value = this.checked;" %>' type="checkbox" value="<%= spreadsheet %>" />
 		</aui:fieldset>
@@ -208,8 +196,8 @@ request.setAttribute("record_set_action.jsp-selRecordSet", selRecordSet);
 			var A = AUI();
 
 			document.<portlet:namespace />fm.<portlet:namespace />recordSetId.value = recordSetId;
-			document.<portlet:namespace />fm.<portlet:namespace />displayDDMTemplateId.value = "";
-			document.<portlet:namespace />fm.<portlet:namespace />formDDMTemplateId.value = "";
+			document.<portlet:namespace />fm.<portlet:namespace />displayDDMTemplateId.value = '';
+			document.<portlet:namespace />fm.<portlet:namespace />formDDMTemplateId.value = '';
 
 			A.one('.displaying-record-set-id-holder').show();
 			A.one('.displaying-help-message-holder').hide();

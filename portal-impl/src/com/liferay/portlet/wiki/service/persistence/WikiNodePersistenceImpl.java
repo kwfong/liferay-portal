@@ -4539,7 +4539,7 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 			CacheRegistryUtil.clear(WikiNodeImpl.class.getName());
 		}
 
-		EntityCacheUtil.clearCache(WikiNodeImpl.class.getName());
+		EntityCacheUtil.clearCache(WikiNodeImpl.class);
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
@@ -4925,7 +4925,7 @@ public class WikiNodePersistenceImpl extends BasePersistenceImpl<WikiNode>
 		}
 
 		EntityCacheUtil.putResult(WikiNodeModelImpl.ENTITY_CACHE_ENABLED,
-			WikiNodeImpl.class, wikiNode.getPrimaryKey(), wikiNode);
+			WikiNodeImpl.class, wikiNode.getPrimaryKey(), wikiNode, false);
 
 		clearUniqueFindersCache(wikiNode);
 		cacheUniqueFindersCache(wikiNode);

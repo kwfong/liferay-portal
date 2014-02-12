@@ -34,34 +34,34 @@ boolean minQuantityMultiple = PrefsPropsUtil.getBoolean(company.getCompanyId(), 
 	function <portlet:namespace />checkout() {
 		if (<%= ShoppingUtil.meetsMinOrder(shoppingPrefs, items) ? "true" : "false" %>) {
 			if (!itemsInStock) {
-				if (confirm("<%= UnicodeLanguageUtil.get(pageContext, "your-cart-has-items-that-are-out-of-stock") %>")) {
-					document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = "<%= Constants.CHECKOUT %>";
-					document.<portlet:namespace />fm.<portlet:namespace />redirect.value = "<portlet:actionURL><portlet:param name="struts_action" value="/shopping/checkout" /></portlet:actionURL>";
+				if (confirm('<%= UnicodeLanguageUtil.get(pageContext, "your-cart-has-items-that-are-out-of-stock") %>')) {
+					document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.CHECKOUT %>';
+					document.<portlet:namespace />fm.<portlet:namespace />redirect.value = '<portlet:actionURL><portlet:param name="struts_action" value="/shopping/checkout" /></portlet:actionURL>';
 					<portlet:namespace />updateCart();
 				}
 			}
 			else {
-				document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = "<%= Constants.CHECKOUT %>";
-				document.<portlet:namespace />fm.<portlet:namespace />redirect.value = "<portlet:actionURL><portlet:param name="struts_action" value="/shopping/checkout" /></portlet:actionURL>";
+				document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = '<%= Constants.CHECKOUT %>';
+				document.<portlet:namespace />fm.<portlet:namespace />redirect.value = '<portlet:actionURL><portlet:param name="struts_action" value="/shopping/checkout" /></portlet:actionURL>';
 				<portlet:namespace />updateCart();
 			}
 		}
 		else {
-			alert("<%= UnicodeLanguageUtil.format(pageContext, "your-order-cannot-be-processed-because-it-falls-below-the-minimum-required-amount-of-x", currencyFormat.format(shoppingPrefs.getMinOrder()), false) %>");
+			alert('<%= UnicodeLanguageUtil.format(pageContext, "your-order-cannot-be-processed-because-it-falls-below-the-minimum-required-amount-of-x", currencyFormat.format(shoppingPrefs.getMinOrder()), false) %>');
 		}
 	}
 
 	function <portlet:namespace />emptyCart() {
-		document.<portlet:namespace />fm.<portlet:namespace />itemIds.value = "";
-		document.<portlet:namespace />fm.<portlet:namespace />couponCodes.value = "";
+		document.<portlet:namespace />fm.<portlet:namespace />itemIds.value = '';
+		document.<portlet:namespace />fm.<portlet:namespace />couponCodes.value = '';
 
 		submitForm(document.<portlet:namespace />fm);
 	}
 
 	function <portlet:namespace />updateCart() {
-		var itemIds = "";
 		var count = 0;
-		var invalidSKUs = "";
+		var invalidSKUs = '';
+		var itemIds = '';
 
 		<%
 		int itemsCount= 0;
@@ -76,16 +76,16 @@ boolean minQuantityMultiple = PrefsPropsUtil.getBoolean(company.getCompanyId(), 
 
 			count = document.<portlet:namespace />fm.<portlet:namespace />item_<%= item.getItemId() %>_<%= itemsCount %>_count.value;
 
-			if ((count == "") || isNaN(count) || (count < 0) || ((count > <%= maxQuantity %>) && (<%= maxQuantity %> > 0))) {
-				if (invalidSKUs != "") {
+			if ((count == '') || isNaN(count) || (count < 0) || ((count > <%= maxQuantity %>) && (<%= maxQuantity %> > 0))) {
+				if (invalidSKUs != '') {
 					invalidSKUs += ", ";
 				}
 
-				invalidSKUs += "<%= item.getSku() %>";
+				invalidSKUs += '<%= HtmlUtil.escapeJS(item.getSku()) %>';
 			}
 
 			for (var i = 0; i < count; i++) {
-				itemIds += "<%= cartItem.getCartItemId() %>,";
+				itemIds += '<%= HtmlUtil.escapeJS(cartItem.getCartItemId()) %>,';
 			}
 
 			count = 0;
@@ -97,11 +97,11 @@ boolean minQuantityMultiple = PrefsPropsUtil.getBoolean(company.getCompanyId(), 
 
 		document.<portlet:namespace />fm.<portlet:namespace />itemIds.value = itemIds;
 
-		if (invalidSKUs == "") {
+		if (invalidSKUs == '') {
 			submitForm(document.<portlet:namespace />fm);
 		}
 		else {
-			alert("<%= UnicodeLanguageUtil.get(pageContext, "please-enter-valid-quantities-for-the-following-skus") %>" + invalidSKUs);
+			alert('<%= UnicodeLanguageUtil.get(pageContext, "please-enter-valid-quantities-for-the-following-skus") %>' + invalidSKUs);
 		}
 	}
 </aui:script>
@@ -145,7 +145,7 @@ boolean minQuantityMultiple = PrefsPropsUtil.getBoolean(company.getCompanyId(), 
 			ShoppingItem item = ShoppingItemServiceUtil.getItem(badItemIds[i]);
 		%>
 
-			<strong><%= item.getSku() %></strong><c:if test="<%= i + 1 < badItemIds.length %>">,</c:if>
+			<strong><%= HtmlUtil.escape(item.getSku()) %></strong><c:if test="<%= i + 1 < badItemIds.length %>">,</c:if>
 
 		<%
 		}
@@ -294,9 +294,9 @@ boolean minQuantityMultiple = PrefsPropsUtil.getBoolean(company.getCompanyId(), 
 			String fieldValue = fieldsArray[j].substring(pos + 1);
 
 			sb.append("<br />");
-			sb.append(fieldName);
+			sb.append(HtmlUtil.escape(fieldName));
 			sb.append(": ");
-			sb.append(fieldValue);
+			sb.append(HtmlUtil.escape(fieldValue));
 		}
 
 		if (itemPrices.length > 0) {
@@ -518,7 +518,7 @@ boolean minQuantityMultiple = PrefsPropsUtil.getBoolean(company.getCompanyId(), 
 		for (int i = 0; i < ccTypes.length; i++) {
 	%>
 
-			<img alt="<%= ccTypes[i] %>" src="<%= themeDisplay.getPathThemeImages() %>/shopping/cc_<%= ccTypes[i] %>.png" />
+			<img alt="<%= HtmlUtil.escapeAttribute(ccTypes[i]) %>" src="<%= themeDisplay.getPathThemeImages() %>/shopping/cc_<%= HtmlUtil.escapeAttribute(ccTypes[i]) %>.png" />
 
 	<%
 		}

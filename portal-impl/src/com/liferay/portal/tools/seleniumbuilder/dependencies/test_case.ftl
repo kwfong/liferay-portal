@@ -40,6 +40,8 @@ public class ${seleniumBuilderContext.getTestCaseSimpleClassName(testCaseName)}
 		extends BaseTestCase {
 	</#if>
 
+	<#assign void = variableContextStack.push("definitionScopeVariables")>
+
 	public ${seleniumBuilderContext.getTestCaseSimpleClassName(testCaseName)}() {
 		super();
 
@@ -51,7 +53,7 @@ public class ${seleniumBuilderContext.getTestCaseSimpleClassName(testCaseName)}
 
 			definitionScopeVariables = new HashMap<String, String>();
 
-			<#assign context = "definitionScopeVariables">
+			<#assign void = variableContextStack.push("definitionScopeVariables")>
 
 			<#list varElements as varElement>
 				<#include "var_element.ftl">
@@ -75,12 +77,14 @@ public class ${seleniumBuilderContext.getTestCaseSimpleClassName(testCaseName)}
 			<#list varElements as varElement>
 				<#assign lineNumber = varElement.attributeValue("line-number")>
 
-				selenium.sendLogger(currentTestCaseName + "${lineNumber}", "pending", ${context});
+				selenium.sendLogger(currentTestCaseName + "${lineNumber}", "pending");
 
-				selenium.sendLogger(currentTestCaseName + "${lineNumber}", "pass", ${context});
+				selenium.sendLogger(currentTestCaseName + "${lineNumber}", "pass");
 			</#list>
 		</#if>
 	}
+
+	<#assign void = variableContextStack.pop()>
 
 	<#assign methodNames = ["command", "set-up", "tear-down"]>
 
@@ -97,6 +101,14 @@ public class ${seleniumBuilderContext.getTestCaseSimpleClassName(testCaseName)}
 			</#if>
 
 			(String commandName, boolean nested) throws Exception {
+				<#if methodName == "set-up">
+					selenium.sendTestCaseCommandLogger("${testCaseName}#SetUp");
+				<#elseif methodName == "tear-down">
+					selenium.sendTestCaseCommandLogger("${testCaseName}#TearDown");
+				<#else>
+					selenium.sendTestCaseCommandLogger("${testCaseName}#${methodElement.attributeValue("name")}");
+				</#if>
+
 				commandScopeVariables = new HashMap<String, String>();
 
 				commandScopeVariables.putAll(definitionScopeVariables);
@@ -114,25 +126,29 @@ public class ${seleniumBuilderContext.getTestCaseSimpleClassName(testCaseName)}
 				</#list>
 
 				if (!nested) {
-					selenium.sendLogger(currentTestCaseName + commandName, "start", commandScopeVariables);
+					selenium.sendLogger(currentTestCaseName + commandName, "start");
 
-					selenium.sendLogger(currentTestCaseName + commandName, "pending", commandScopeVariables);
+					selenium.sendLogger(currentTestCaseName + commandName, "pending");
 
 					<#assign lineNumber = methodElement.attributeValue("line-number")>
 
-					selenium.sendLogger(testCaseName + "${lineNumber}", "pending", commandScopeVariables);
+					selenium.sendLogger(testCaseName + "${lineNumber}", "pending");
 				}
 
 				<#assign blockElement = methodElement>
 
 				<#assign blockLevel = "testcase">
 
+				<#assign void = variableContextStack.push("commandScopeVariables")>
+
 				<#include "block_element.ftl">
+
+				<#assign void = variableContextStack.pop()>
 
 				if (!nested) {
 					<#assign lineNumber = methodElement.attributeValue("line-number")>
 
-					selenium.sendLogger(currentTestCaseName + "${lineNumber}", "pass", commandScopeVariables);
+					selenium.sendLogger(currentTestCaseName + "${lineNumber}", "pass");
 				}
 			}
 		</#list>
@@ -161,6 +177,8 @@ public class ${seleniumBuilderContext.getTestCaseSimpleClassName(testCaseName)}
 						tearDownBeforeTest = false;
 					}
 				</#if>
+
+				selenium.sendTestCaseHeaderLogger("${testCaseName}#${commandName}");
 
 				<#if rootElement.element("set-up")??>
 					methodSetUp("${commandName}", false);

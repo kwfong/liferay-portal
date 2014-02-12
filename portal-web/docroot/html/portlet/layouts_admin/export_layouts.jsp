@@ -38,9 +38,16 @@ if (group.isStagingGroup() && !group.isStagedRemotely()) {
 
 boolean privateLayout = ParamUtil.getBoolean(request, "privateLayout");
 
-String rootNodeName = ParamUtil.getString(request, "rootNodeName");
+String rootNodeName = StringPool.BLANK;
 
-DateRange dateRange = ExportImportHelperUtil.getDateRange(renderRequest, liveGroupId, privateLayout, 0, null, "all");
+if (privateLayout) {
+	rootNodeName = LanguageUtil.get(pageContext, "private-pages");
+}
+else {
+	rootNodeName = LanguageUtil.get(pageContext, "public-pages");
+}
+
+DateRange dateRange = ExportImportDateUtil.getDateRange(renderRequest, liveGroupId, privateLayout, 0, null, ExportImportDateUtil.RANGE_ALL);
 
 Date startDate = dateRange.getStartDate();
 Date endDate = dateRange.getEndDate();
@@ -72,6 +79,15 @@ portletURL.setParameter("liveGroupId", String.valueOf(liveGroupId));
 portletURL.setParameter("privateLayout", String.valueOf(privateLayout));
 portletURL.setParameter("rootNodeName", rootNodeName);
 %>
+
+<portlet:renderURL var="backURL">
+	<portlet:param name="struts_action" value="/layouts_admin/edit_layout_set" />
+</portlet:renderURL>
+
+<liferay-ui:header
+	backURL="<%= backURL %>"
+	title='<%= privateLayout ? LanguageUtil.get(pageContext, "export-private-pages") : LanguageUtil.get(pageContext, "export-public-pages") %>'
+/>
 
 <liferay-ui:tabs
 	names="new-export-process,current-and-previous"
@@ -351,10 +367,10 @@ portletURL.setParameter("rootNodeName", rootNodeName);
 															<ul class="hide unstyled" id="<portlet:namespace />rangeLastInputs">
 																<li>
 																	<aui:select cssClass="relative-range" label="" name="last">
-																		<aui:option label='<%= LanguageUtil.format(pageContext, "x-hours", "12") %>' value="12" />
-																		<aui:option label='<%= LanguageUtil.format(pageContext, "x-hours", "24") %>' value="24" />
-																		<aui:option label='<%= LanguageUtil.format(pageContext, "x-hours", "48") %>' value="48" />
-																		<aui:option label='<%= LanguageUtil.format(pageContext, "x-days", "7") %>' value="168" />
+																		<aui:option label='<%= LanguageUtil.format(pageContext, "x-hours", "12", false) %>' value="12" />
+																		<aui:option label='<%= LanguageUtil.format(pageContext, "x-hours", "24", false) %>' value="24" />
+																		<aui:option label='<%= LanguageUtil.format(pageContext, "x-hours", "48", false) %>' value="48" />
+																		<aui:option label='<%= LanguageUtil.format(pageContext, "x-days", "7", false) %>' value="168" />
 																	</aui:select>
 																</li>
 															</ul>
@@ -570,7 +586,7 @@ portletURL.setParameter("rootNodeName", rootNodeName);
 				<aui:button-row>
 					<aui:button type="submit" value="export" />
 
-					<aui:button href="<%= currentURL %>" type="cancel" />
+					<aui:button href="<%= backURL %>" type="cancel" />
 				</aui:button-row>
 			</aui:form>
 		</div>

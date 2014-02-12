@@ -463,7 +463,7 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 							<div class="lfr-discussion-posted-on">
 								<c:choose>
 									<c:when test="<%= message.getParentMessageId() == rootMessage.getMessageId() %>">
-										<%= LanguageUtil.format(pageContext, "posted-on-x", dateFormatDateTime.format(message.getModifiedDate())) %>
+										<%= LanguageUtil.format(pageContext, "posted-on-x", dateFormatDateTime.format(message.getModifiedDate()), false) %>
 									</c:when>
 									<c:otherwise>
 
@@ -508,7 +508,7 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 										sb.append("</a>");
 										%>
 
-										<%= LanguageUtil.format(pageContext, "posted-on-x-in-reply-to-x", new Object[] {dateFormatDateTime.format(message.getModifiedDate()), sb.toString()}) %>
+										<%= LanguageUtil.format(pageContext, "posted-on-x-in-reply-to-x", new Object[] {dateFormatDateTime.format(message.getModifiedDate()), sb.toString()}, false) %>
 									</c:otherwise>
 								</c:choose>
 							</div>
@@ -538,16 +538,16 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZo
 
 	<aui:script>
 		function <%= randomNamespace %>hideForm(rowId, textAreaId, textAreaValue) {
-			document.getElementById(rowId).style.display = "none";
+			document.getElementById(rowId).style.display = 'none';
 			document.getElementById(textAreaId).value = textAreaValue;
 		}
 
 		function <%= randomNamespace %>scrollIntoView(messageId) {
-			document.getElementById("<%= randomNamespace %>messageScroll" + messageId).scrollIntoView();
+			document.getElementById('<%= randomNamespace %>messageScroll' + messageId).scrollIntoView();
 		}
 
 		function <%= randomNamespace %>showForm(rowId, textAreaId) {
-			document.getElementById(rowId).style.display = "block";
+			document.getElementById(rowId).style.display = 'block';
 			document.getElementById(textAreaId).focus();
 		}
 

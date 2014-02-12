@@ -2497,11 +2497,11 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 				QueryPos qPos = QueryPos.getInstance(q);
 
 				if (bindRepoGroupId) {
-					qPos.add(repoGroupId.toLowerCase());
+					qPos.add(StringUtil.toLowerCase(repoGroupId));
 				}
 
 				if (bindRepoArtifactId) {
-					qPos.add(repoArtifactId.toLowerCase());
+					qPos.add(StringUtil.toLowerCase(repoArtifactId));
 				}
 
 				List<SCProductEntry> list = q.list();
@@ -2633,11 +2633,11 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 				QueryPos qPos = QueryPos.getInstance(q);
 
 				if (bindRepoGroupId) {
-					qPos.add(repoGroupId.toLowerCase());
+					qPos.add(StringUtil.toLowerCase(repoGroupId));
 				}
 
 				if (bindRepoArtifactId) {
-					qPos.add(repoArtifactId.toLowerCase());
+					qPos.add(StringUtil.toLowerCase(repoArtifactId));
 				}
 
 				count = (Long)q.uniqueResult();
@@ -2720,7 +2720,7 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 			CacheRegistryUtil.clear(SCProductEntryImpl.class.getName());
 		}
 
-		EntityCacheUtil.clearCache(SCProductEntryImpl.class.getName());
+		EntityCacheUtil.clearCache(SCProductEntryImpl.class);
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
@@ -3015,7 +3015,7 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 
 		EntityCacheUtil.putResult(SCProductEntryModelImpl.ENTITY_CACHE_ENABLED,
 			SCProductEntryImpl.class, scProductEntry.getPrimaryKey(),
-			scProductEntry);
+			scProductEntry, false);
 
 		clearUniqueFindersCache(scProductEntry);
 		cacheUniqueFindersCache(scProductEntry);
@@ -3616,9 +3616,6 @@ public class SCProductEntryPersistenceImpl extends BasePersistenceImpl<SCProduct
 		}
 		catch (Exception e) {
 			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(SCProductEntryModelImpl.MAPPING_TABLE_SCLICENSES_SCPRODUCTENTRIES_NAME);
 		}
 	}
 

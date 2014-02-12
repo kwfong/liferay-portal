@@ -75,7 +75,7 @@ response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 
 	config.closeNoticeTimeout = 8000;
 
-	config.contentsCss = '<%= HtmlUtil.escapeJS(cssPath) %>/main.css';
+	config.contentsCss = ['<%= HtmlUtil.escapeJS(cssPath) %>/aui.css', '<%= HtmlUtil.escapeJS(cssPath) %>/main.css'];
 
 	config.contentsLangDirection = '<%= PortalUtil.isRightToLeft(request) ? "rtl" : "ltr" %>';
 
@@ -88,6 +88,10 @@ response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
 	config.height = 265;
 
 	config.language = '<%= HtmlUtil.escapeJS(languageId.replace("iw_", "he_")) %>';
+
+	config.pasteFromWordRemoveFontStyles = false;
+
+	config.pasteFromWordRemoveStyles = false;
 
 	config.resize_enabled = <%= resizable %>;
 

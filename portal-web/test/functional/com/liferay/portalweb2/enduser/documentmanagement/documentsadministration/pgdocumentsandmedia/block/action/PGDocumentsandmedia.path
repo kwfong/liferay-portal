@@ -29,6 +29,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>SUCCESS_MESSAGE_RECYCLE_BIN</td>
+	<td>//form[@id='_20_undoForm']</td>
+	<td></td>
+</tr>
+<tr>
 	<td>EMPTY_MESSAGE</td>
 	<td>//div[contains(@class,'entries-empty') and contains(@class,'alert') and contains(@class,'alert-info')]</td>
 	<td></td>
@@ -36,6 +41,21 @@
 <tr>
 	<td>INFO_MESSAGE</td>
 	<td>//div[contains(@class,'entries-empty') and contains(@class,'alert') and contains(@class,'alert-info')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>ERROR_MESSAGE</td>
+	<td>//div[contains(@class,'alert') and contains(@class,'alert-error')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>SUBSCRIBE_LINK</td>
+	<td>//div[@class='subscribe-action']/span/a/span</td>
+	<td></td>
+</tr>
+<tr>
+	<td>OPTIONS</td>
+	<td>//a[@title='Options']</td>
 	<td></td>
 </tr>
 <tr>
@@ -142,26 +162,11 @@
 	<td></td>
 </tr>
 <tr>
-	<td>TOOLBAR_SEARCH_FIELD</td>
-	<td>//input[contains(@class,'search-query')]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>TOOLBAR_SEARCH_BUTTON</td>
-	<td>//button[contains(.,'Search')]</td>
-	<td></td>
-</tr>
-<tr>
 	<td></td>
 	<td></td>
 	<td></td>
 </tr>
 <!--DISPLAY_STYLE_MENULIST-->
-<tr>
-	<td>DISPLAY_STYLE_MENULIST</td>
-	<td>//div[contains(@id,'displayStyleButtons')]//a</td>
-	<td></td>
-</tr>
 <tr>
 	<td>DISPLAY_STYLE_MENULIST_ICON</td>
 	<td>//a[@role='menuitem' and contains(.,'Icon')]</td>
@@ -201,27 +206,27 @@
 <!--ACTIONS_MENULIST-->
 <tr>
 	<td>ACTIONS_MENULIST_CANCEL_CHECKOUT</td>
-	<td>//a[@role='menuitem' and contains(.,'Cancel Checkout')]</td>
+	<td>//ul[contains(@class,'dropdown-menu')]/li/a[contains(.,'Cancel Checkout')]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>ACTIONS_MENULIST_CHECKIN</td>
-	<td>//a[@role='menuitem' and contains(.,'Checkin')]</td>
+	<td>//ul[contains(@class,'dropdown-menu')]/li/a[contains(.,'Checkin')]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>ACTIONS_MENULIST_CHECKOUT</td>
-	<td>//a[@role='menuitem' and contains(.,'Checkout')]</td>
+	<td>//ul[contains(@class,'dropdown-menu')]/li[3]/a[contains(.,'Checkout')]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>ACTIONS_MENULIST_MOVE</td>
-	<td>//a[@role='menuitem' and contains(.,'Move')]</td>
+	<td>//ul[contains(@class,'dropdown-menu')]/li/a[contains(.,'Move')]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>ACTIONS_MENULIST_MOVE_TO_THE_RECYCLE_BIN</td>
-	<td>//a[@role='menuitem' and contains(.,'Move to the Recycle Bin')]</td>
+	<td>//ul[contains(@class,'dropdown-menu')]/li[@id='_20_moveToTrashAction']/a[contains(.,'Move to the Recycle Bin')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -349,52 +354,48 @@
 	<td></td>
 	<td></td>
 </tr>
-<!--ENTRIES-->
+<!--ENTRY_ICON_DOCUMENT-->
 <tr>
-	<td>ENTRIES_SUBSCRIBE</td>
-	<td>//div[@class='subscribe-action']/span/a/span</td>
+	<td>ENTRY_ICON_DOCUMENT_THUMBNAIL</td>
+	<td>//div[contains(.,'${key_dmDocumentTitle}') and a[@data-folder='false']]//div[@class='entry-thumbnail']</td>
 	<td></td>
 </tr>
 <tr>
-	<td>ENTRIES_DOCUMENT</td>
+	<td>ENTRY_ICON_DOCUMENT_THUMBNAIL_GENERIC</td>
 	<td>//a[@data-folder='false']/div[@class='entry-thumbnail']</td>
 	<td></td>
 </tr>
 <tr>
-	<td>ENTRIES_DOCUMENT_STATUS</td>
-	<td>//span[@class='workflow-status']/strong</td>
+	<td>ENTRY_ICON_DOCUMENT_STATUS</td>
+	<td>//div[contains(.,'${key_dmDocumentTitle}') and a[@data-folder='false']]//span[@class='workflow-status']/strong</td>
 	<td></td>
 </tr>
 <tr>
-	<td>ENTRIES_DOCUMENT_LOCKED</td>
-	<td>//div[@class='entry-thumbnail']/img[@alt='Locked']</td>
+	<td>ENTRY_ICON_DOCUMENT_LOCKED_ICON</td>
+	<td>//div[contains(.,'${key_dmDocumentTitle}') and a[@data-folder='false']]//div[@class='entry-thumbnail']/img[@alt='Locked']</td>
 	<td></td>
 </tr>
 <tr>
-	<td>ENTRIES_DOCUMENT_TITLE</td>
-	<td>//a[@data-folder='false']//span[@class='entry-title']/span[contains(.,'${dmDocumentTitle}')]</td>
+	<td>ENTRY_ICON_DOCUMENT_TITLE</td>
+	<td>//div[contains(.,'${key_dmDocumentTitle}') and a[@data-folder='false']]//span[@class='entry-title']/span</td>
 	<td></td>
 </tr>
 <tr>
-	<td>ENTRIES_DOCUMENT_DESCRIPTION</td>
-	<td>//div[@data-title='${key_dmDocumentTitle}']//span[@class='entry-description']</td>
-	<td>Document Title</td>
-</tr>
-<tr>
-	<td>ENTRIES_DOCUMENT_SEARCH_TITLE</td>
-	<td>//div[contains(@id,'Results')]/div/form/div/a/div[2]/span</td>
-	<td>Document Search Title</td>
-</tr>
-<tr>
-	<td>ENTRIES_DOCUMENT_SELECT</td>
-	<td>//input[@id='_20_rowIdsFileEntryCheckbox']</td>
+	<td>ENTRY_ICON_DOCUMENT_CHECKBOX</td>
+	<td>//div[contains(.,'${key_dmDocumentTitle}') and a[@data-folder='false']]//input[@id='_20_rowIdsFileEntryCheckbox']</td>
 	<td></td>
 </tr>
 <tr>
-	<td>ENTRIES_DOCUMENT_ACTIONS</td>
-	<td>//div/span[contains(@class,'entry-action') and contains(@class,'overlay')]/div/a/i</td>
+	<td>ENTRY_ICON_DOCUMENT_ACTIONS</td>
+	<td>//div[contains(.,'${key_dmDocumentTitle}') and a[@data-folder='false']]//span[contains(@class,'entry-action') and contains(@class,'overlay')]/div/a/i</td>
 	<td></td>
 </tr>
+<tr>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+<!--ENTRIES_FOLDER-->
 <tr>
 	<td>ENTRIES_FOLDER</td>
 	<td>//a[@data-folder='true']/div[@class='entry-thumbnail']</td>
@@ -416,53 +417,48 @@
 	<td></td>
 </tr>
 <tr>
-	<td>ENTRIES_SEARCH_DOCUMENT_TITLE</td>
-	<td>//span[@class='entry-title']</td>
-	<td></td>
-</tr>
-<tr>
 	<td></td>
 	<td></td>
 	<td></td>
 </tr>
-<!--LIST_ENTRIES-->
+<!--ENTRY_LIST_DOCUMENT-->
 <tr>
-	<td>LIST_ENTRIES_DOCUMENT_CHECKBOX</td>
+	<td>ENTRY_LIST_DOCUMENT_CHECKBOX</td>
 	<td>//tr[@data-title='${key_dmDocumentTitle}']//input[@type='checkbox']</td>
 	<td></td>
 </tr>
 <tr>
-	<td>LIST_ENTRIES_DOCUMENT_ICON</td>
+	<td>ENTRY_LIST_DOCUMENT_ICON</td>
 	<td>//tr[@data-title='${key_dmDocumentTitle}']//img</td>
 	<td></td>
 </tr>
 <tr>
-	<td>LIST_ENTRIES_DOCUMENT_TITLE</td>
+	<td>ENTRY_LIST_DOCUMENT_TITLE</td>
 	<td>//tr[@data-title='${key_dmDocumentTitle}']//span[@class='taglib-text ']</td>
 	<td></td>
 </tr>
 <tr>
-	<td>LIST_ENTRIES_DOCUMENT_WORKFLOW</td>
+	<td>ENTRY_LIST_DOCUMENT_WORKFLOW</td>
 	<td>//tr[@data-title='${key_dmDocumentTitle}']//span[contains(@class,'workflow-status')]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>LIST_ENTRIES_DOCUMENT_LOCKED</td>
+	<td>ENTRY_LIST_DOCUMENT_LOCKED</td>
 	<td>//tr[@data-title='${key_dmDocumentTitle}']//div[contains(@class,'locked')]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>LIST_ENTRIES_DOCUMENT_SIZE</td>
+	<td>ENTRY_LIST_DOCUMENT_SIZE</td>
 	<td>//tr[@data-title='${key_dmDocumentTitle}']//td[3]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>LIST_ENTRIES_DOCUMENT_DOWNLOARD</td>
+	<td>ENTRY_LIST_DOCUMENT_DOWNLOAD</td>
 	<td>//tr[@data-title='${key_dmDocumentTitle}']//td[5]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>LIST_ENTRIES_DOCUMENT_ACTION</td>
+	<td>ENTRY_LIST_DOCUMENT_ACTION</td>
 	<td>//tr[@data-title='${key_dmDocumentTitle}']//a[@id='_20_ocerSearchContainer_1_menu']</td>
 	<td></td>
 </tr>
@@ -543,32 +539,6 @@
 	<td></td>
 	<td></td>
 </tr>
-<!--DOCUMENT_CONTAINER_DOCUMENT-->
-<tr>
-	<td>DOCUMENT_CONTAINER_DOCUMENT</td>
-	<td>//div[@id='_20_entriesContainer']//div[contains(.,'${key_dmDocumentTitle}')]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>DOCUMENT_CONTAINER_DOCUMENT_CHECKBOX</td>
-	<td>//div[@id='_20_entriesContainer']//div[contains(.,'${key_dmDocumentTitle}')]/input[contains(@id,'_20_rowIdsFileEntryCheckbox')]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>DOCUMENT_CONTAINER_DOCUMENT_DROPDOWN</td>
-	<td>//div[@id='_20_entriesContainer']//div[contains(.,'${key_dmDocumentTitle}')]/span/div/a</td>
-	<td></td>
-</tr>
-<tr>
-	<td>DOCUMENT_CONTAINER_DOCUMENT_TITLE</td>
-	<td>//div[@id='_20_entriesContainer']//div[contains(.,'${key_dmDocumentTitle}')]/a/span/span</td>
-	<td></td>
-</tr>
-<tr>
-	<td></td>
-	<td></td>
-	<td></td>
-</tr>
 <!--PAGINATION-->
 <tr>
 	<td>PAGINATION_PREVIOUS</td>
@@ -578,6 +548,42 @@
 <tr>
 	<td>PAGINATION_NEXT</td>
 	<td>//div[contains(@class,'document-entries-pagination')]/ul/li[contains(.,'Next')]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+<!--OPTIONS_MENULIST-->
+<tr>
+	<td>OPTIONS_MENULIST_LOOK_AND_FEEL</td>
+	<td>//ul[contains(@class,'lfr-menu-list')]/li/a[contains(.,'Look and Feel')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>OPTIONS_MENULIST_CONFIGURATION</td>
+	<td>//ul[contains(@class,'lfr-menu-list')]/li/a[contains(.,'Configuration')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>OPTIONS_MENULIST_EXPORT_IMPORT</td>
+	<td>//ul[contains(@class,'lfr-menu-list')]/li/a[contains(.,'Export / Import')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>OPTIONS_MENULIST_MAXIMIZE</td>
+	<td>//ul[contains(@class,'lfr-menu-list')]/li/a[contains(.,'Maximize')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>OPTIONS_MENULIST_MINIMIZE</td>
+	<td>//ul[contains(@class,'lfr-menu-list')]/li/a[contains(.,'Minimize')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>OPTIONS_MENULIST_REMOVE</td>
+	<td>//ul[contains(@class,'lfr-menu-list')]/li/a[contains(.,'Remove')]</td>
 	<td></td>
 </tr>
 </tbody>

@@ -51,6 +51,16 @@ public class PortalCacheWrapper<K extends Serializable, V>
 	}
 
 	@Override
+	public void putQuiet(K key, V value) {
+		portalCache.putQuiet(key, value);
+	}
+
+	@Override
+	public void putQuiet(K key, V value, int timeToLive) {
+		portalCache.putQuiet(key, value, timeToLive);
+	}
+
+	@Override
 	public void registerCacheListener(CacheListener<K, V> cacheListener) {
 		portalCache.registerCacheListener(cacheListener);
 	}
@@ -71,6 +81,10 @@ public class PortalCacheWrapper<K extends Serializable, V>
 	@Override
 	public void removeAll() {
 		portalCache.removeAll();
+	}
+
+	public void setPortalCache(PortalCache<K, V> portalCache) {
+		this.portalCache = portalCache;
 	}
 
 	@Override

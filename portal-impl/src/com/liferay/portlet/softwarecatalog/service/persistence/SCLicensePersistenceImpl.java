@@ -1895,7 +1895,7 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 			CacheRegistryUtil.clear(SCLicenseImpl.class.getName());
 		}
 
-		EntityCacheUtil.clearCache(SCLicenseImpl.class.getName());
+		EntityCacheUtil.clearCache(SCLicenseImpl.class);
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
@@ -2113,7 +2113,7 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 		}
 
 		EntityCacheUtil.putResult(SCLicenseModelImpl.ENTITY_CACHE_ENABLED,
-			SCLicenseImpl.class, scLicense.getPrimaryKey(), scLicense);
+			SCLicenseImpl.class, scLicense.getPrimaryKey(), scLicense, false);
 
 		scLicense.resetOriginalValues();
 
@@ -2704,9 +2704,6 @@ public class SCLicensePersistenceImpl extends BasePersistenceImpl<SCLicense>
 		}
 		catch (Exception e) {
 			throw processException(e);
-		}
-		finally {
-			FinderCacheUtil.clearCache(SCLicenseModelImpl.MAPPING_TABLE_SCLICENSES_SCPRODUCTENTRIES_NAME);
 		}
 	}
 

@@ -19,17 +19,14 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portalweb.portal.BaseTestCase;
-import com.liferay.portalweb.portal.util.RuntimeVariables;
 import com.liferay.portalweb.portal.util.TestPropsValues;
 
 import java.io.File;
 
 import java.lang.reflect.Method;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
 
@@ -204,26 +201,11 @@ public class Logger {
 	public void logScreenShots(Object[] arguments) throws Exception {
 		StringBundler sb = new StringBundler();
 
-		String fileName = (String)arguments[0];
-
-		if (_screenshotFileName.equals(fileName)) {
-			_screenshotCount++;
-		}
-		else {
-			_screenshotCount = 0;
-
-			_screenshotFileName = fileName;
-		}
-
-		_screenshotFileName = fileName;
+		_screenshotCount++;
 
 		sb.append("<img alt=\"");
-		sb.append(_screenshotFileName);
 		sb.append(_screenshotCount);
-		sb.append("\" height=\"750\" src=\"");
-		sb.append(_screenshotFileName);
-		sb.append("/");
-		sb.append(_screenshotFileName);
+		sb.append("\" height=\"750\" src=\"screenshots/");
 		sb.append(_screenshotCount);
 		sb.append(".jpg\" width=\"1050\" />");
 
@@ -257,6 +239,29 @@ public class Logger {
 		log("actionCommandLog", sb.toString(), "selenium");
 	}
 
+	public void logTestCaseCommand(Object[] arguments) throws Exception {
+		StringBundler sb = new StringBundler();
+
+		String tesCaseCommand = (String)arguments[0];
+
+		sb.append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+		sb.append(tesCaseCommand);
+
+		log("actionCommandLog", sb.toString(), "seleniumCommands");
+	}
+
+	public void logTestCaseHeader(Object[] arguments) throws Exception {
+		StringBundler sb = new StringBundler();
+
+		String tesCaseHeader = (String)arguments[0];
+
+		sb.append("<b>");
+		sb.append(tesCaseHeader);
+		sb.append("</b>");
+
+		log("actionCommandLog", sb.toString(), "seleniumCommands");
+	}
+
 	public void pauseLoggerCheck() throws Exception {
 		WebElement webElement = _webDriver.findElement(By.id("pause"));
 
@@ -274,20 +279,11 @@ public class Logger {
 	public void send(Object[] arguments) {
 		String id = (String)arguments[0];
 		String status = (String)arguments[1];
-		Map<String, String> context = new HashMap<String, String>();
 
-		if (arguments.length > 2) {
-			context = (HashMap<String, String>)arguments[2];
-		}
-
-		send(id, status, context);
+		send(id, status);
 	}
 
 	public void send(String id, String status) {
-		send(id, status, new HashMap<String, String>());
-	}
-
-	public void send(String id, String status, Map<String, String> context) {
 		if (status.equals("pending")) {
 			_xPathIdStack.push(id);
 		}
@@ -313,33 +309,6 @@ public class Logger {
 		sb.append("\";");
 
 		for (WebElement webElement : webElements) {
-			_javascriptExecutor.executeScript(sb.toString(), webElement);
-		}
-
-		webElements = _webDriver.findElements(
-			By.xpath(xPath + "//span[@class='quote']"));
-
-		sb = new StringBundler();
-
-		sb.append("var element = arguments[0];");
-		sb.append("return element.innerHTML;");
-
-		String innerHTMLJavascript = sb.toString();
-
-		for (WebElement webElement : webElements) {
-			String value = (String)_javascriptExecutor.executeScript(
-				innerHTMLJavascript, webElement);
-
-			value = RuntimeVariables.evaluateVariable(value, context);
-			value = StringEscapeUtils.escapeEcmaScript(value);
-
-			sb = new StringBundler();
-
-			sb.append("var element = arguments[0];");
-			sb.append("element.title = \"");
-			sb.append(value);
-			sb.append("\";");
-
 			_javascriptExecutor.executeScript(sb.toString(), webElement);
 		}
 	}
@@ -610,7 +579,6 @@ public class Logger {
 	private LiferaySelenium _liferaySelenium;
 	private boolean _loggerStarted;
 	private int _screenshotCount;
-	private String _screenshotFileName = "";
 	private int _seleniumCount = 1;
 	private WebDriver _webDriver = new FirefoxDriver();
 	private Stack<String> _xPathIdStack = new Stack<String>();
